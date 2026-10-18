@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Está tu empresa en el registro del PRTR? · EcoSinergia</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+         background: #f4f6f3; color: #17201a; }
+  header { background: #14432c; color: #fff; padding: 22px 20px; }
+  header h1 { margin: 0; font-size: 24px; line-height: 1.25; max-width: 720px; }
+  header p { margin: 8px 0 0; font-size: 14px; opacity: .85; max-width: 720px; }
+  main { max-width: 760px; margin: 0 auto; padding: 20px; }
+  .caja { background: #fff; border: 1px solid #dde3dc; border-radius: 12px; padding: 18px; margin: 16px 0; }
+  input[type=search] { width: 100%; padding: 16px; font-size: 19px; border: 1px solid #c9d2c9;
+                       border-radius: 10px; background: #fff; }
+  .sug { list-style: none; margin: 10px 0 0; padding: 0; }
+  .sug li { padding: 12px 14px; border: 1px solid #e6ebe5; border-radius: 9px; margin-top: 8px;
+            cursor: pointer; display: flex; justify-content: space-between; gap: 10px; }
+  .sug li:hover { background: #f2f6f1; }
+  .sug .t { color: #5b6b5e; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ficha h2 { margin: 0 0 4px; font-size: 21px; }
+  .dato { display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; margin: 14px 0; }
+  .dato strong { font-size: 26px; font-variant-numeric: tabular-nums; }
+  .etiqueta { color: #5b6b5e; font-size: 14px; }
+  .preg { margin: 18px 0 8px; font-weight: 600; }
+  .botonera { display: flex; gap: 10px; flex-wrap: wrap; }
+  button { font: inherit; padding: 12px 18px; border-radius: 10px; border: 1px solid #c9d2c9;
+           background: #fff; cursor: pointer; }
+  button.principal { background: #14432c; color: #fff; border-color: #14432c; }
+  .aviso { margin-top: 14px; padding: 14px 16px; border-radius: 10px; background: #f7f4ec;
+           border: 1px solid #ece2cc; display: none; }
+  .aviso.ver { display: block; }
+  .puertas { display: grid; gap: 12px; margin-top: 8px; }
+  .puerta { display: block; text-decoration: none; color: inherit; border: 1px solid #dde3dc;
+            border-radius: 12px; padding: 14px 16px; background: #fff; }
+  .puerta b { display: block; font-size: 18px; }
+  .puerta span { color: #5b6b5e; font-size: 15px; }
+  footer { max-width: 760px; margin: 0 auto; padding: 0 20px 40px; color: #6d7b70; font-size: 13px; }
+  .oculto { display: none; }
+  a.wa { display: inline-block; margin-top: 14px; font-weight: 600; color: #0b6b3a; }
+</style>
+</head>
+<body>
+<header>
+  <h1>¿Está tu empresa en el registro del PRTR?</h1>
+  <p>Los datos de residuos de 2024 ya son públicos: 33,3 millones de toneladas, 5.364 plantas.
+     Buscá la tuya y mirá qué dice el registro — sin registrarte, sin dar tu correo.</p>
+</header>
+<main>
+  <div class="caja">
+    <input type="search" id="b" placeholder="Escribí el nombre de tu empresa o planta…" autocomplete="off" autofocus>
+    <ul class="sug" id="sug"></ul>
+    <p class="etiqueta" id="hint">Ejemplo: “AZOR”, “prezero”, “Cartagena”.</p>
+  </div>
+
+  <div class="caja ficha oculto" id="ficha">
+    <h2 id="f-nombre"></h2>
+    <div class="etiqueta" id="f-prov"></div>
+    <div class="dato">
+      <div><span class="etiqueta">Residuos declarados en 2024</span><br><strong id="f-ton"></strong></div>
+      <div><span class="etiqueta">Códigos LER distintos</span><br><strong id="f-ler"></strong></div>
+    </div>
+    <p class="etiqueta" id="f-coord"></p>
+
+    <p class="preg">¿Coincide con lo que vos sabés que declaraste?</p>
+    <div class="botonera">
+      <button data-r="si">Sí</button>
+      <button data-r="no">No</button>
+      <button data-r="nose">No lo sé</button>
+    </div>
+    <div class="aviso" id="aviso"></div>
+    <a class="wa oculto" id="wa" target="_blank" rel="noopener">📱 Mandámelo por WhatsApp</a>
+  </div>
+
+  <div class="caja oculto" id="noesta">
+    <h2>No figura en el registro</h2>
+    <p id="noesta-txt"></p>
+  </div>
+
+  <div class="caja">
+    <p class="preg">Y además, tres cosas que sí te obligan todos los días:</p>
+    <div class="puertas">
+      <a class="puerta" href="#consultar"><b>Consultar</b><span>La normativa, con el artículo
+        del BOE y su enlace. Cuando no hay fuente, no contesta.</span></a>
+      <a class="puerta" href="#avisar"><b>Avisar</b><span>Cuando cambia una norma que te afecta,
+        con el texto del cambio y el aviso listo para reenviar.</span></a>
+      <a class="puerta" href="#automatizar"><b>Automatizar</b><span>De la notificación de
+        traslado a la tabla, sin tipear. Y la agenda de lo que vence.</span></a>
+    </div>
+  </div>
+
+  <article class="caja" id="consultar">
+    <h2>Consultar · la normativa con el artículo delante</h2>
+    <p>Preguntás con tus palabras y el sistema devuelve <b>el artículo literal del BOE</b>, con el enlace
+       oficial y la fecha de la versión. <b>Cuando no encuentra la fuente, no contesta.</b></p>
+    <p class="etiqueta">Los 182 fragmentos de la Ley 7/2022 están verificados contra el texto oficial.
+       No es un asesor: dice dónde está escrito.</p>
+    <button class="principal" data-pedir="consultar">Pedí una consulta de prueba</button>
+  </article>
+
+  <article class="caja" id="avisar">
+    <h2>Avisar · cuando cambia una norma que te afecta</h2>
+    <p>Vigila el BOE y la normativa consolidada: <b>qué cambió, desde cuándo rige</b>, y el aviso
+       listo para reenviar.</p>
+    <p class="etiqueta">Y vigila lo que casi nadie mira: las fechas de entrada en vigor, que se mueven.
+       Por ejemplo, el RD 106/2008 se publicó un 12 de febrero y entró en vigor el 26 de septiembre.</p>
+    <button class="principal" data-pedir="avisar">Quiero un aviso de prueba</button>
+  </article>
+
+  <article class="caja" id="automatizar">
+    <h2>Automatizar · de la notificación a la tabla</h2>
+    <p>Del documento del traslado a una tabla: <b>empresa, residuo, LER, toneladas, fechas y vencimientos</b>.
+       Sin tipear, sin copiar y pegar.</p>
+    <p class="etiqueta">Es lo que menos se ve y lo que más tiempo devuelve. Veinte minutos de diagnóstico
+       alcanzan para saber cuánto hay.</p>
+    <button class="principal" data-pedir="automatizar">Pedí el diagnóstico de 20 minutos</button>
+  </article>
+</main>
+<footer>
+  Fuente: PRTR-España (MITECO), datos de residuos 2024 y visor geográfico del PRTR. Son datos públicos y
+  agregados: el registro cubre los complejos por encima de los umbrales del PRTR, no a todas las empresas.
+  Esta página no guarda tus datos en ningún servidor.
+</footer>
+
+<script>
+const ORIGEN = (new URLSearchParams(location.search).get('origen') || 'directo');
+let DATOS = null, sel = null, resp = null;
+
+const norm = s => (s || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
+                   .replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+
+function buscar(q) {
+  const nq = norm(q);
+  if (nq.length < 2) return [];
+  const toks = nq.split(' ');
+  // alias de asociados primero
+  const porAlias = [];
+  for (const k in DATOS.alias) {
+    if (norm(k) === nq || toks.every(t => norm(k).includes(t))) {
+      for (const nombre of DATOS.alias[k]) {
+        const c = DATOS.complejos.find(x => x[0] === nombre);
+        if (c) porAlias.push(c);
+      }
+    }
+  }
+  const directos = DATOS.complejos.filter(c => toks.every(t => norm(c[0]).includes(t)))
+                                  .sort((a, b) => (b[4] || 0) - (a[4] || 0));
+  // Los alias del asociado van PRIMERO: quien busca "DSM" tiene que ver sus plantas, no las que se
+  // llaman igual y son de otro.
+  const todos = [];
+  for (const c of porAlias) if (!todos.includes(c)) todos.push(c);
+  for (const c of directos) if (!todos.includes(c)) todos.push(c);
+  return todos.slice(0, 8);
+}
+
+function euros(n) { return n === null || n === undefined ? '—' : n.toLocaleString('es-ES') + ' t'; }
+
+function pintarSug(lista, q) {
+  const ul = document.getElementById('sug');
+  const hint = document.getElementById('hint');
+  ul.innerHTML = '';
+  if (!q || q.trim().length < 2) { hint.textContent = 'Ejemplo: “AZOR”, “prezero”, “Cartagena”.'; return; }
+  if (!lista.length) { hint.textContent = 'Sin coincidencias por nombre.'; return; }
+  hint.textContent = lista.length + ' coincidencia(s). Marcá la tuya:';
+  for (const c of lista) {
+    const li = document.createElement('li');
+    li.innerHTML = '<span>' + c[0] + '</span><span class="t">' + euros(c[4]) + '</span>';
+    li.onclick = () => elegir(c);
+    ul.appendChild(li);
+  }
+}
+
+function elegir(c) {
+  sel = c;
+  document.getElementById('ficha').classList.remove('oculto');
+  document.getElementById('noesta').classList.add('oculto');
+  document.getElementById('f-nombre').textContent = c[0];
+  document.getElementById('f-prov').textContent = 'Provincia: ' + (c[3] || '—') + ' · año 2024';
+  document.getElementById('f-ton').textContent = euros(c[4]);
+  document.getElementById('f-ler').textContent = c[5] ? String(c[5]) : '—';
+  document.getElementById('f-coord').textContent = c[1] ? 'Ubicación registrada: ' + c[1].toFixed(3) + ', ' + c[2].toFixed(3) : '';
+  document.getElementById('aviso').className = 'aviso';
+  document.getElementById('wa').classList.add('oculto');
+  resp = null;
+}
+
+function responder(r) {
+  if (!sel) return;
+  resp = r;
+  const av = document.getElementById('aviso');
+  av.classList.add('ver');
+  if (r === 'si') {
+    av.innerHTML = '<b>Entonces tu dato está bien cargado.</b> Lo que sigue es que te avisemos cuando la ' +
+      'norma que te aplica cambie — y que el número del registro y tu archivo no se separen nunca.';
+  } else if (r === 'no') {
+    av.innerHTML = '<b>Entonces hay una diferencia entre el registro y tu archivo.</b> No es raro, y se ' +
+      'resuelve: es lo que revisamos en el diagnóstico de veinte minutos.';
+  } else {
+    av.innerHTML = '<b>Ese “no lo sé” es el problema.</b> El archivo cronológico (art. 64 de la Ley 7/2022) ' +
+      'tiene que existir y poder cuadrar con lo declarado. En veinte minutos te decimos cuánto hay.';
+  }
+  const wa = document.getElementById('wa');
+  const txt = 'PRTR 2024 · ' + sel[0] + ': ' + euros(sel[4]) + ' · ¿coincide con mi archivo? ' + r + '. ' +
+              'Me interesa el diagnóstico. (Vengo del QR ' + ORIGEN + ')';
+  wa.href = 'https://wa.me/?text=' + encodeURIComponent(txt);
+  wa.classList.remove('oculto');
+}
+
+document.getElementById('b').addEventListener('input', e => {
+  const q = e.target.value;
+  const lista = buscar(q);
+  pintarSug(lista, q);
+  if (q.trim().length >= 4 && !lista.length) {
+    document.getElementById('noesta').classList.remove('oculto');
+    document.getElementById('ficha').classList.add('oculto');
+    document.getElementById('noesta-txt').textContent =
+      'Con ese nombre no aparece. El PRTR no obliga a todas las empresas: cubre complejos por encima de ' +
+      'umbrales (instalaciones que tratan o generan cantidades importantes). Si no estás, no significa que no ' +
+      'declares — significa que el registro no te alcanza, y lo que sí te obliga es el archivo cronológico ' +
+      'y las notificaciones de traslado.';
+  }
+});
+
+document.querySelectorAll('[data-r]').forEach(b => b.addEventListener('click', () => responder(b.dataset.r)));
+
+// Cada puerta lleva su propio pedido, con el origen del QR adentro: se captura sin pedir registro.
+const PEDIDOS = {
+  consultar: 'Consultar: quiero una consulta de prueba con una pregunta mía.',
+  avisar:    'Avisar: quiero recibir un aviso de prueba cuando cambie una norma.',
+  automatizar:'Automatizar: quiero el diagnóstico de veinte minutos.'
+};
+document.querySelectorAll('[data-pedir]').forEach(b => b.addEventListener('click', () => {
+  const t = PEDIDOS[b.dataset.pedir] + ' (Vengo del QR ' + ORIGEN + ')';
+  window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank');
+}));
+
+fetch('datos.json').then(r => r.json()).then(d => {
+  DATOS = d;
+  document.getElementById('hint').textContent =
+    'Ejemplo: “AZOR”, “prezero”, “Cartagena”. · ' + d.complejos.length.toLocaleString('es-ES') + ' plantas en el registro';
+}).catch(() => {
+  document.getElementById('hint').textContent = 'No se pudo cargar el registro. Probá recargar la página.';
+});
+</script>
+</body>
+</html>
