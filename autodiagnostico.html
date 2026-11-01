@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>¿Dónde estás frente a la IA? · EcoSinergia</title>
-<meta name="description" content="Seis preguntas para saber en qué punto del camino estás. Sin registro y sin datos: el cálculo ocurre en tu teléfono.">
+<meta name="description" content="Seis preguntas para saber en qué punto del camino estás. Tus respuestas no se envían ni se guardan: el cálculo se hace en tu teléfono.">
 <style>
   :root { color-scheme: light; }
   * { box-sizing: border-box; }
@@ -12,21 +12,33 @@
          background: #f4f6f3; color: #17201a; }
   header { background: #14432c; color: #fff; padding: 22px 20px 20px; }
   header h1 { margin: 0; font-size: 25px; line-height: 1.2; max-width: 640px; }
-  header p { margin: 8px 0 0; font-size: 14px; opacity: .88; max-width: 640px; }
+  header p { margin: 8px 0 0; font-size: 14px; opacity: .9; max-width: 640px; }
   main { max-width: 640px; margin: 0 auto; padding: 18px 18px 40px; }
   .caja { background: #fff; border: 1px solid #dde3dc; border-radius: 14px; padding: 18px; margin: 16px 0; }
   .barra { height: 6px; background: #e2e8e1; border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
   .barra i { display: block; height: 100%; background: #2f7a52; width: 0; transition: width .3s ease; }
   h2 { font-size: 20px; margin: 0 0 14px; line-height: 1.3; }
   button.op { display: block; width: 100%; text-align: left; font: inherit; padding: 15px 16px; margin: 9px 0;
-              background: #fff; border: 1.5px solid #c9d2c9; border-radius: 11px; cursor: pointer; }
+              background: #fff; border: 1.5px solid #c9d2c9; border-radius: 11px; cursor: pointer;
+              transition: background .12s ease, border-color .12s ease, color .12s ease; }
   button.op:hover { background: #f2f6f1; border-color: #2f7a52; }
   button.op:active { background: #e8f0e8; }
+  button.op.elegida { background: #14432c; border-color: #14432c; color: #fff; }
+  /* Con JavaScript apagado se ven las seis preguntas; con JavaScript, de a una. */
+  html.js .bloque { display: none; }
+  html.js .bloque.activo { display: block; }
+  html.js .bloque.entra { animation: entra .18s ease-out; }
+  @media (prefers-reduced-motion: reduce) {
+    html.js .bloque.entra { animation: none; }
+    .barra i { transition: none; }
+  }
+  #solo-js { display: none; }
+  @keyframes entra { from { opacity: .55; transform: translateY(5px); } to { opacity: 1; transform: none; } }
   .chico { font-size: 13.5px; color: #6d7b70; }
-  #paso { display: none; }
   #resultado { display: none; }
   .paso { font-size: 19px; font-weight: 600; margin: 0 0 10px; }
   .cond { font-size: 15px; color: #b3261e; font-weight: 600; margin: 12px 0 6px; }
+  .remate { font-size: 15px; background: #f2f6f1; border-radius: 10px; padding: 11px 14px; margin: 10px 0 4px; }
   .fig { width: 100%; max-width: 460px; margin: 6px auto 0; display: block; }
   .acciones { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
   .acciones button, .acciones a { font: inherit; font-size: 15px; padding: 11px 15px; border-radius: 10px;
@@ -34,8 +46,12 @@
   .acciones button:hover, .acciones a:hover { background: #14432c; color: #fff; }
   .seguir { margin: 16px 0 8px; font-size: 16px; }
   .seguir a { color: #14432c; font-weight: 600; }
+  #a-mano { width: 100%; font: inherit; font-size: 14px; margin-top: 10px; border: 1.5px solid #c9d2c9;
+             border-radius: 10px; padding: 10px; }
   details { margin-top: 14px; font-size: 14px; color: #6d7b70; }
   summary { cursor: pointer; }
+  details ol { padding-left: 20px; }
+  details li { margin-bottom: 6px; }
   footer { max-width: 640px; margin: 0 auto; padding: 0 18px 40px; font-size: 13px; color: #6d7b70; }
 </style>
 <!-- sin contador: esta página no hace ninguna petición externa -->
@@ -43,16 +59,41 @@
 <body>
 <header>
   <h1>¿Dónde estás frente a la inteligencia artificial?</h1>
-  <p>Seis preguntas. Ningún dato sale de tu teléfono: el cálculo se hace acá, y solo lo ves vos.</p>
+  <p>Seis preguntas. <strong>Tus respuestas no se envían ni se guardan</strong>: el cálculo se hace en tu teléfono, y el resultado lo ves solo vos.</p>
 </header>
 <main>
   <section class="caja" id="paso">
-    <div class="barra"><i id="progreso" style="width:16%"></i></div>
-    <h2 id="texto-pregunta">¿Usás hoy alguna herramienta de inteligencia artificial en tu trabajo?</h2>
-    <div id="opciones"><button class="op">No</button><button class="op">A veces</button><button class="op">Todos los días</button></div>
-    <p class="chico" id="contador">Pregunta 1 de 6</p>
-    <noscript><p class="chico">Con el JavaScript apagado no se puede completar, pero las preguntas están todas
-    acá: son seis y se contestan en un minuto.</p></noscript>
+    <div id="solo-js">
+      <div class="barra"><i id="progreso"></i></div>
+    </div>
+    <div class="bloque" data-bloque="0">
+      <h2>¿Usás hoy alguna herramienta de inteligencia artificial en tu trabajo?</h2>
+      <button class="op" data-q="0" data-v="0">No</button><button class="op" data-q="0" data-v="1">A veces</button><button class="op" data-q="0" data-v="2">Todos los días</button>
+    </div>
+    <div class="bloque" data-bloque="1">
+      <h2>¿Quién la usa en tu empresa?</h2>
+      <button class="op" data-q="1" data-v="0">Solo yo</button><button class="op" data-q="1" data-v="1">Algunos</button><button class="op" data-q="1" data-v="2">El equipo</button>
+    </div>
+    <div class="bloque" data-bloque="2">
+      <h2>¿Está metida en un proceso de la empresa, o es de uso personal?</h2>
+      <button class="op" data-q="2" data-v="0">Es personal</button><button class="op" data-q="2" data-v="1">A medias</button><button class="op" data-q="2" data-v="2">Es parte del proceso</button>
+    </div>
+    <div class="bloque" data-bloque="3">
+      <h2>¿Alguien midió cuánto tiempo ahorra?</h2>
+      <button class="op" data-q="3" data-v="0">No</button><button class="op" data-q="3" data-v="1">Lo estimamos</button><button class="op" data-q="3" data-v="2">Lo medimos</button>
+    </div>
+    <div class="bloque" data-bloque="4">
+      <h2>¿Tenés un proceso concreto que querés automatizar?</h2>
+      <button class="op" data-q="4" data-v="0">No</button><button class="op" data-q="4" data-v="1">Tengo candidatos</button><button class="op" data-q="4" data-v="2">Está definido</button>
+    </div>
+    <div class="bloque" data-bloque="5">
+      <h2>¿Quién decide hoy una inversión de este tipo?</h2>
+      <button class="op" data-q="5" data-v="0">Yo</button><button class="op" data-q="5" data-v="1">La dirección</button><button class="op" data-q="5" data-v="2">No lo sé</button>
+    </div>
+    <p class="chico" id="contador" hidden></p>
+    <noscript><p class="chico">Con el JavaScript apagado no se puede calcular el resultado, pero las seis
+    preguntas están todas acá arriba: se contestan en un minuto y con eso alcanza para pensarlo. El cálculo
+    —y sólo el cálculo— necesita JavaScript.</p></noscript>
   </section>
 
   <section class="caja" id="resultado">
@@ -61,21 +102,32 @@
     <p class="paso" id="paso-resultado"></p>
     <p class="cond" id="condicion-resultado"></p>
     <p class="chico" id="porque-resultado"></p>
+    <p class="remate" id="remate"></p>
     <div class="acciones">
       <a id="compartir" href="#">Compartirlo por WhatsApp</a>
       <button id="copiar">Copiar mi resultado</button>
       <button id="otra">Empezar de nuevo</button>
     </div>
+    <textarea id="a-mano" rows="6" hidden readonly></textarea>
     <p class="seguir"><a id="detalle" href="./documento.html">Tu paso, en detalle: qué hacer esta semana y cómo
     saber si funcionó →</a></p>
     <p class="chico">El 2 y 3 de diciembre lo hacemos con AEMA: dos horas, con casos reales. La invitación la
     manda la asociación —acá no hay nada que dejar, ni el nombre.</p>
     <details>
       <summary>Cómo se calcula</summary>
-      <p>Tres reglas, en este orden. Primera: si ya medís el tiempo que ahorrás y tenés un proceso definido,
-      estás en condiciones de decidir una inversión. Segunda: si algo está integrado en un proceso o ya hay
-      candidatos, el trabajo está en el proceso. Si no, el trabajo está en empezar. Cuando las respuestas no
-      encajan en las dos primeras, el resultado es el primero — el más conservador, no el más vendedor.</p>
+      <p>Cuatro reglas, en este orden, y <strong>las seis respuestas intervienen</strong>:</p>
+      <ol>
+        <li>Si hoy no usás ninguna herramienta, el resultado es el primero: todavía no hay nada que medir ni que
+        integrar. <em>El tramo no se tiene por lo que se planea, sino por lo que se usa.</em></li>
+        <li>Si medís el ahorro, tenés un proceso definido y ese proceso <strong>ya está integrado</strong>, estás en
+        condiciones de decidir una inversión: el tercero.</li>
+        <li>Si el proceso está integrado, o hay un candidato definido, o <strong>el equipo entero</strong> la usa,
+        el trabajo está en el proceso: el segundo.</li>
+        <li>En cualquier otro caso, el trabajo está en empezar: el primero.</li>
+      </ol>
+      <p>La sexta —quién decide— <strong>no cambia el tramo: cambia lo que te toca hacer</strong>, y por eso
+      aparece como una línea aparte en el resultado. Cuando las respuestas no encajan en las reglas anteriores,
+      el resultado es el primero: el más conservador, no el más vendedor.</p>
     </details>
   </section>
 </main>
@@ -85,6 +137,8 @@
   ver datos publicados de tu sector, <a href="./index.html">buscá tu empresa en el visor del PRTR</a>.</p>
 </footer>
 <script>
+document.documentElement.classList.add('js');
+
 const ENLACE = "https://fttab101.github.io/prtr-prueba/autodiagnostico.html";
 const PREGUNTAS = [{p: "¿Usás hoy alguna herramienta de inteligencia artificial en tu trabajo?", o: ["No", "A veces", "Todos los días"]},
 {p: "¿Quién la usa en tu empresa?", o: ["Solo yo", "Algunos", "El equipo"]},
@@ -109,34 +163,55 @@ const RESULTADOS = {
      condicion: "una decisión política y una inversión de la empresa",
      por: "Porque lo que no pasa el filtro no se hace, por bien que se vea en la demostración."},
 };
-let respuestas = [];
-let actual = 0;
+// La sexta pregunta no mueve el tramo: mueve **lo que te toca hacer**. Una frase por tramo y por respuesta.
+const REMATE = {
+1: {0: "Y como decidís vos: dos horas y un antes y un después alcanzan para empezar mañana.", 1: "Como la decisión no es tuya, llevá el antes y el después: es lo único que una dirección mira.", 2: "Antes de empezar, averiguá quién decide: sin eso, el paso siguiente no se sostiene."},
+2: {0: "Con el proceso escrito y un número en la mano, la decisión es tuya y se toma rápido.", 1: "Esto se decide arriba: escribí el proceso y llevalo con el tiempo de antes y el de después.", 2: "Primero, quién decide; después, el proceso. Al revés se escribe dos veces."},
+3: {0: "La decisión es tuya: poné el número del área entera sobre la mesa antes de firmar nada.", 1: "La decisión es de la dirección: tu trabajo es llevar la cuenta del área, no el entusiasmo.", 2: "Antes de invertir, aclarar quién decide: un proyecto sin dueño no vuelve."}
+};
+
+let respuestas = new Array(PREGUNTAS.length).fill(null);
+let ocupado = false;
 
 const $ = (id) => document.getElementById(id);
 
-function pintar() {
-  $('paso').style.display = 'block';
-  $('resultado').style.display = 'none';
-  $('progreso').style.width = (100 * actual / PREGUNTAS.length) + '%';
-  $('texto-pregunta').textContent = PREGUNTAS[actual].p;
-  $('contador').textContent = 'Pregunta ' + (actual + 1) + ' de ' + PREGUNTAS.length;
-  const caja = $('opciones');
-  caja.innerHTML = '';
-  PREGUNTAS[actual].o.forEach((texto, i) => {
-    const b = document.createElement('button');
-    b.className = 'op';
-    b.textContent = texto;
-    b.onclick = () => { respuestas.push(i); actual++; actual < PREGUNTAS.length ? pintar() : mostrar(); };
-    caja.appendChild(b);
-  });
-}
-
+// Las mismas cuatro reglas que `calcular()` en Python. Si se cambia una, se cambia la otra y la batería lo nota.
 function calcular(r) {
-  const [uso, equipo, integracion, medicion, proceso, decide] = r;
-  if (medicion === 2 && proceso === 2) return 3;
-  if (integracion >= 1 || proceso >= 1) return 2;
+  const [uso, equipo, integracion, medicion, proceso] = r;
+  if (uso === 0) return 1;
+  if (medicion === 2 && proceso === 2 && integracion === 1) return 3;
+  if (integracion === 1 || proceso >= 1 || equipo === 2) return 2;
   return 1;
 }
+
+function mostrarBloque(k, animar) {
+  document.querySelectorAll('[data-bloque]').forEach((b, i) => {
+    const activo = i === k;
+    b.classList.toggle('activo', activo);
+    b.classList.remove('entra');
+    if (activo && animar) { void b.offsetWidth; b.classList.add('entra'); }
+  });
+  $('solo-js').style.display = 'block';
+  $('contador').hidden = false;
+  $('progreso').style.width = (100 * k / PREGUNTAS.length) + '%';
+  $('contador').textContent = 'Pregunta ' + (k + 1) + ' de ' + PREGUNTAS.length;
+}
+
+// Se elige una opción: se pinta, se espera un instante para que se vea, y se pasa.
+$('paso').addEventListener('click', (ev) => {
+  const b = ev.target.closest('button.op');
+  if (!b || ocupado) return;
+  ocupado = true;
+  const q = Number(b.dataset.q);
+  respuestas[q] = Number(b.dataset.v);
+  b.classList.add('elegida');
+  setTimeout(() => {
+    b.classList.remove('elegida');
+    ocupado = false;
+    if (q === PREGUNTAS.length - 1) mostrar();
+    else mostrarBloque(q + 1, true);
+  }, 160);
+});
 
 function mover(tramo) {
   const est = document.getElementById('est' + (tramo - 1));
@@ -152,23 +227,39 @@ function mover(tramo) {
   }
 }
 
+// Copiar tiene tres caminos, porque el portapapeles puede estar prohibido (navegador viejo, contexto no seguro,
+// permiso negado). El último no copia: deja el texto seleccionado para que se copie a mano.
+async function copiar(texto, boton) {
+  try {
+    await navigator.clipboard.writeText(texto);
+    boton.textContent = 'Copiado';
+    return;
+  } catch (e) { /* sigue por el camino viejo */ }
+  const ta = $('a-mano');
+  ta.hidden = false;
+  ta.value = texto;
+  ta.focus();
+  ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  boton.textContent = ok ? 'Copiado' : 'Seleccioná y copiá';
+}
+
 function mostrar() {
   const tramo = calcular(respuestas);
   const r = RESULTADOS[tramo];
+  const remate = REMATE[tramo][respuestas[5]];
   $('paso').style.display = 'none';
   $('resultado').style.display = 'block';
   $('titulo-resultado').textContent = r.titulo;
   $('paso-resultado').textContent = r.paso;
   $('condicion-resultado').textContent = 'La condición: ' + r.condicion + '.';
-  let porque = r.por;
-  if (tramo === 3 && respuestas[5] === 2) porque += ' Y antes de eso: aclarar quién decide.';
-  $('porque-resultado').textContent = porque;
+  $('porque-resultado').textContent = r.por;
+  $('remate').textContent = remate;
   mover(tramo);
-  const limpio = r.titulo + '\n' + r.paso + '\n' + 'La condición: ' + r.condicion + '.' + '\n' + porque +
-    '\n\n(EcoSinergia · III Memorial AEMA · 3/11/2026)';
-  $('copiar').onclick = () => {
-    navigator.clipboard?.writeText(limpio).then(() => { $('copiar').textContent = 'Copiado'; });
-  };
+  const limpio = r.titulo + '\n' + r.paso + '\n' + 'La condición: ' + r.condicion + '.\n' + r.por +
+    '\n' + remate + '\n\n(EcoSinergia · III Memorial AEMA · 3/11/2026)';
+  $('copiar').onclick = () => copiar(limpio, $('copiar'));
   $('detalle').href = './documento.html#tramo-' + tramo;
   // El CTA **señala, no captura**: abre WhatsApp con el resultado ya escrito y el enlace para que el otro lo
   // haga también. No hay número nuestro ni formulario: el que lo manda elige a quién.
@@ -177,15 +268,25 @@ function mostrar() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-$('otra').onclick = () => { respuestas = []; actual = 0; $('vos').style.opacity = 0;
-  const et = $('et-vos'); if (et) et.style.opacity = 0; pintar(); };
+$('otra').onclick = () => {
+  respuestas = new Array(PREGUNTAS.length).fill(null);
+  $('vos').style.opacity = 0;
+  const et = $('et-vos');
+  if (et) et.style.opacity = 0;
+  $('resultado').style.display = 'none';
+  $('a-mano').hidden = true;
+  $('copiar').textContent = 'Copiar mi resultado';
+  $('paso').style.display = 'block';
+  mostrarBloque(0, false);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
 
-// `?demo=1|2|3` muestra el resultado de ese tramo sin contestar. Sirve para probar la página y para
-// mostrarla en una pantalla sin tener que hacer seis clics delante de alguien.
-const DEMO = { '1': [0,0,0,0,0,0], '2': [1,1,1,0,0,0], '3': [2,2,2,2,2,0] };
+// `?demo=1|2|3` muestra el resultado de ese tramo sin contestar. Sirve para probar la página y para mostrarla en
+// una pantalla sin tener que hacer seis clics delante de alguien.
+const DEMO = { '1': [0, 0, 0, 0, 0, 0], '2': [1, 0, 1, 0, 0, 1], '3': [2, 2, 1, 2, 2, 0] };
 const pedido = new URLSearchParams(location.search).get('demo');
-if (pedido && DEMO[pedido]) { respuestas = DEMO[pedido]; actual = PREGUNTAS.length; mostrar(); }
-else { pintar(); }
+if (pedido && DEMO[pedido]) { respuestas = DEMO[pedido].slice(); mostrar(); }
+else { mostrarBloque(0, false); }
 </script>
 </body>
 </html>
