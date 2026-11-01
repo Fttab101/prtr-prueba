@@ -32,6 +32,8 @@
   .acciones button, .acciones a { font: inherit; font-size: 15px; padding: 11px 15px; border-radius: 10px;
       border: 1.5px solid #14432c; background: #fff; color: #14432c; text-decoration: none; cursor: pointer; }
   .acciones button:hover, .acciones a:hover { background: #14432c; color: #fff; }
+  .seguir { margin: 16px 0 8px; font-size: 16px; }
+  .seguir a { color: #14432c; font-weight: 600; }
   details { margin-top: 14px; font-size: 14px; color: #6d7b70; }
   summary { cursor: pointer; }
   footer { max-width: 640px; margin: 0 auto; padding: 0 18px 40px; font-size: 13px; color: #6d7b70; }
@@ -64,6 +66,8 @@
       <button id="copiar">Copiar mi resultado</button>
       <button id="otra">Empezar de nuevo</button>
     </div>
+    <p class="seguir"><a id="detalle" href="./documento.html">Tu paso, en detalle: qué hacer esta semana y cómo
+    saber si funcionó →</a></p>
     <p class="chico">El 2 y 3 de diciembre lo hacemos con AEMA: dos horas, con casos reales. La invitación la
     manda la asociación —acá no hay nada que dejar, ni el nombre.</p>
     <details>
@@ -89,18 +93,21 @@ const PREGUNTAS = [{p: "¿Usás hoy alguna herramienta de inteligencia artificia
 {p: "¿Tenés un proceso concreto que querés automatizar?", o: ["No", "Tengo candidatos", "Está definido"]},
 {p: "¿Quién decide hoy una inversión de este tipo?", o: ["Yo", "La dirección", "No lo sé"]}];
 const RESULTADOS = {
-  1: {titulo: "Tu siguiente paso: una persona y una herramienta",
+  1: {nombre: "Personas que multiplican su productividad",
+     titulo: "Tu siguiente paso: una persona y una herramienta",
      paso: "Elegí una herramienta y una persona, y dales dos horas de entrenamiento esta semana. No hace falta comprar nada ni pedir permiso.",
-     condicion: "La condición: aprender antes de comprar.",
-     por: "Porque en este punto el límite no es el presupuesto: es la práctica."},
-  2: {titulo: "Tu siguiente paso: escribir el proceso antes de automatizarlo",
+     condicion: "aprendizaje y entrenamiento",
+     por: "Porque el primer paso no es comprar, es aprender."},
+  2: {nombre: "Procesos que usan servicios sofisticados",
+     titulo: "Tu siguiente paso: escribir el proceso antes de automatizarlo",
      paso: "Elegí un proceso concreto y escribí cómo funciona hoy —quién hace qué, con qué documento y cuánto tarda— antes de que lo toque ninguna máquina.",
-     condicion: "La condición: análisis antes que desarrollo.",
+     condicion: "análisis y desarrollo",
      por: "Porque no se puede automatizar el desorden: automatizar el desorden solo lo hace más rápido."},
-  3: {titulo: "Tu siguiente paso: la cuenta económica del área completa",
+  3: {nombre: "Racionalización de las líneas de producción",
+     titulo: "Tu siguiente paso: la cuenta económica del área completa",
      paso: "Antes de invertir, poné sobre la mesa el resultado económico del área entera —no solo la mejora del proceso— y una medida de vuelta.",
-     condicion: "La condición: la decisión es de la dirección, no del técnico.",
-     por: "Porque un proyecto que no vuelve no es un avance, aunque la demostración sea impecable."},
+     condicion: "una decisión política y una inversión de la empresa",
+     por: "Porque lo que no pasa el filtro no se hace, por bien que se vea en la demostración."},
 };
 let respuestas = [];
 let actual = 0;
@@ -152,16 +159,17 @@ function mostrar() {
   $('resultado').style.display = 'block';
   $('titulo-resultado').textContent = r.titulo;
   $('paso-resultado').textContent = r.paso;
-  $('condicion-resultado').textContent = r.condicion;
+  $('condicion-resultado').textContent = 'La condición: ' + r.condicion + '.';
   let porque = r.por;
   if (tramo === 3 && respuestas[5] === 2) porque += ' Y antes de eso: aclarar quién decide.';
   $('porque-resultado').textContent = porque;
   mover(tramo);
-  const limpio = r.titulo + '\n' + r.paso + '\n' + r.condicion + '\n' + porque +
+  const limpio = r.titulo + '\n' + r.paso + '\n' + 'La condición: ' + r.condicion + '.' + '\n' + porque +
     '\n\n(EcoSinergia · III Memorial AEMA · 3/11/2026)';
   $('copiar').onclick = () => {
     navigator.clipboard?.writeText(limpio).then(() => { $('copiar').textContent = 'Copiado'; });
   };
+  $('detalle').href = './documento.html#tramo-' + tramo;
   // El CTA **señala, no captura**: abre WhatsApp con el resultado ya escrito y el enlace para que el otro lo
   // haga también. No hay número nuestro ni formulario: el que lo manda elige a quién.
   $('compartir').href = 'https://wa.me/?text=' + encodeURIComponent(
