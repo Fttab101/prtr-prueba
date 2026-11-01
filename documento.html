@@ -36,6 +36,8 @@
   footer { border-top: 3px solid #14432c; margin-top: 32px; padding-top: 16px; font-size: 14px; color: #46564a; }
   footer .qr { display: flex; gap: 16px; align-items: center; margin-top: 10px; }
   footer img { width: 130px; height: 130px; image-rendering: pixelated; }
+  .corta { font-size: 21px; font-weight: 700; letter-spacing: .01em; color: #14432c;
+           font-family: ui-monospace, "Courier New", monospace; }
   a { color: #2f7a52; }
   @media print {
     @page { size: A4; margin: 15mm 16mm; }
@@ -49,6 +51,7 @@
     .cierre { break-before: page; border-top: none; text-align: center; padding-top: 30mm; }
     .cierre .qr { flex-direction: column; justify-content: center; gap: 10px; }
     .cierre img { width: 200px; height: 200px; }
+    .cierre .corta { font-size: 20pt; }
     .mapa { max-width: 290px; }
     a { color: #17201a; text-decoration: none; }
   }
@@ -122,7 +125,8 @@ juntos, valen más que la suma de los tres.</p>
   <div class="qr">
     <img src="./qr-autodiagnostico.png" alt="Código QR del autodiagnóstico" width="130" height="130">
     <div><strong>El autodiagnóstico</strong><br>Sin registro, sin correo y sin dejar datos.<br>
-    <span style="font-size:13px">https://fttab101.github.io/prtr-prueba/autodiagnostico.html</span></div>
+    <span class="corta">is.gd/autodiag</span><br>
+    <span style="font-size:12.5px">Si no podés escanear, escribí esa dirección tal cual.</span></div>
   </div>
 </footer>
 </div>
