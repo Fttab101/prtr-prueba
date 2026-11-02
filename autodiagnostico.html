@@ -50,6 +50,7 @@
   .acciones button, .acciones a { font: inherit; font-size: 15px; padding: 11px 15px; border-radius: 10px;
       border: 1.5px solid #14432c; background: #fff; color: #14432c; text-decoration: none; cursor: pointer; }
   .acciones button:hover, .acciones a:hover { background: #14432c; color: #fff; }
+  .acciones a.cta { background: #14432c; color: #fff; font-weight: 600; }
   .seguir { margin: 16px 0 8px; font-size: 16px; }
   .seguir a { color: #14432c; font-weight: 600; }
   .atras { margin-top: 12px; }
@@ -116,15 +117,18 @@
     <p class="chico" id="porque-resultado"></p>
     <p class="remate" id="remate"></p>
     <div class="acciones">
+      <a id="pedir" href="#" class="cta">¿Cómo empiezo el primer tramo?</a>
       <a id="compartir" href="#">Compartirlo por WhatsApp</a>
       <button id="copiar">Copiar mi resultado</button>
       <button id="otra">Empezar de nuevo</button>
     </div>
+    <p class="chico">El botón abre tu correo con el mensaje escrito: me llega <strong>tu dirección y el tramo que
+    te salió</strong> —las seis respuestas, no—. Te contesto con la hoja de ese tramo en PDF.</p>
     <textarea id="a-mano" rows="6" hidden readonly></textarea>
     <p class="seguir"><a id="detalle" href="./documento.html">Tu paso, en detalle: qué hacer esta semana y cómo
     saber si funcionó →</a></p>
-    <p class="chico">El 2 y 3 de diciembre lo hacemos con AEMA: dos horas, con casos reales. La invitación la
-    manda la asociación —acá no hay nada que dejar, ni el nombre.</p>
+    <p class="chico">Si querés seguir, el paso siguiente no lo damos acá: te lo contamos cuando AEMA lo confirme.
+    Mientras tanto, la hoja del tramo alcanza para empezar.</p>
     <details>
       <summary>Cómo se calcula</summary>
       <p>Cuatro reglas, en este orden, y <strong>las seis respuestas intervienen</strong>:</p>
@@ -289,6 +293,13 @@ function mostrar() {
     '\n' + remate + '\n\n(EcoSinergia · III Memorial AEMA · 3/11/2026)';
   $('copiar').onclick = () => copiar(limpio, $('copiar'));
   $('detalle').href = './documento.html#tramo-' + tramo;
+  // El CTA cambia de texto según el tramo: a quien está en el 2 no se le ofrece «el primer tramo».
+  const PEDIDO = { 1: '¿Cómo empiezo el primer tramo?', 2: '¿Cómo arranco el tramo 2?',
+                    3: '¿Cómo arranco el tramo 3?' };
+  $('pedir').textContent = PEDIDO[tramo];
+  $('pedir').href = 'mailto:fttab101@gmail.com?subject=' + encodeURIComponent('Autodiagnóstico · tramo ' + tramo) +
+    '&body=' + encodeURIComponent('Hola Héctor: hice el autodiagnóstico del Memorial y me salió el tramo ' + tramo +
+      ' (' + r.nombre + '). ¿Me mandás la hoja de ese tramo en PDF?');
   // El CTA **señala, no captura**: abre WhatsApp con el resultado ya escrito y el enlace para que el otro lo
   // haga también. No hay número nuestro ni formulario: el que lo manda elige a quién.
   $('compartir').href = 'https://wa.me/?text=' + encodeURIComponent(
