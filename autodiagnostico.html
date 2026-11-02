@@ -13,6 +13,9 @@
   header { background: #14432c; color: #fff; padding: 22px 20px 20px; }
   header h1 { margin: 0; font-size: 25px; line-height: 1.2; max-width: 640px; }
   header p { margin: 8px 0 0; font-size: 14px; opacity: .9; max-width: 640px; }
+  .marca { display: flex; align-items: center; gap: 11px; margin-bottom: 13px; }
+  .marca img { height: 36px; width: auto; display: block; }
+  .marca span { font-size: 12.5px; letter-spacing: .16em; text-transform: uppercase; opacity: .92; }
   main { max-width: 640px; margin: 0 auto; padding: 18px 18px 40px; }
   .caja { background: #fff; border: 1px solid #dde3dc; border-radius: 14px; padding: 18px; margin: 16px 0; }
   .barra { height: 6px; background: #e2e8e1; border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
@@ -58,6 +61,7 @@
 </head>
 <body>
 <header>
+  <div class="marca"><img src="./logo-icono.png" alt="" width="41" height="36"><span>EcoSinergia</span></div>
   <h1>¿Dónde estás frente a la inteligencia artificial?</h1>
   <p>Seis preguntas. <strong>Tus respuestas no se envían ni se guardan</strong>: el cálculo se hace en tu teléfono, y el resultado lo ves solo vos.</p>
 </header>
@@ -132,7 +136,8 @@
   </section>
 </main>
 <footer>
-  <p>EcoSinergia · III Memorial AEMA · 3 de noviembre de 2026.</p>
+  <p>EcoSinergia · Héctor Medina Rodríguez · <a href="./datos.html">Quién está detrás y contacto</a></p>
+  <p>III Memorial AEMA · 3 de noviembre de 2026.</p>
   <p>Esto no es un test de nivel ni un diagnóstico profesional: es un punto de partida para conversar. Si querés
   ver datos publicados de tu sector, <a href="./index.html">buscá tu empresa en el visor del PRTR</a>.</p>
 </footer>

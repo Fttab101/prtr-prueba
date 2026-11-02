@@ -29,15 +29,13 @@
   .botonera { display: flex; gap: 10px; flex-wrap: wrap; }
   button { font: inherit; padding: 12px 18px; border-radius: 10px; border: 1px solid #c9d2c9;
            background: #fff; cursor: pointer; }
-  button.principal { background: #14432c; color: #fff; border-color: #14432c; }
   .aviso { margin-top: 14px; padding: 14px 16px; border-radius: 10px; background: #f7f4ec;
            border: 1px solid #ece2cc; display: none; }
   .aviso.ver { display: block; }
-  .puertas { display: grid; gap: 12px; margin-top: 8px; }
-  .puerta { display: block; text-decoration: none; color: inherit; border: 1px solid #dde3dc;
-            border-radius: 12px; padding: 14px 16px; background: #fff; }
-  .puerta b { display: block; font-size: 18px; }
-  .puerta span { color: #5b6b5e; font-size: 15px; }
+  .marca { display: flex; align-items: center; gap: 11px; margin-bottom: 14px; }
+  .marca img { height: 36px; width: auto; display: block; }
+  .marca span { font-size: 12.5px; letter-spacing: .16em; text-transform: uppercase; opacity: .92; }
+  .quien { margin-top: 22px; }
   footer { max-width: 760px; margin: 0 auto; padding: 0 20px 40px; color: #6d7b70; font-size: 13px; }
   .oculto { display: none; }
   a.wa { display: inline-block; margin-top: 14px; font-weight: 600; color: #0b6b3a; }
@@ -45,6 +43,7 @@
 </head>
 <body>
 <header>
+  <div class="marca"><img src="./logo-icono.png" alt="" width="41" height="36"><span>EcoSinergia</span></div>
   <h1>¿Está tu empresa en el registro del PRTR?</h1>
   <p>Los datos de residuos de 2024 ya son públicos: 33,3 millones de toneladas, 5.364 plantas.
      Buscá la tuya y mirá qué dice el registro — sin registrarte, sin dar tu correo.</p>
@@ -80,49 +79,12 @@
     <p id="noesta-txt"></p>
   </div>
 
-  <div class="caja">
-    <p class="preg">Y además, tres cosas que sí te obligan todos los días:</p>
-    <div class="puertas">
-      <a class="puerta" href="#consultar"><b>Consultar</b><span>La normativa, con el artículo
-        del BOE y su enlace. Cuando no hay fuente, no contesta.</span></a>
-      <a class="puerta" href="#avisar"><b>Avisar</b><span>Cuando cambia una norma que te afecta,
-        con el texto del cambio y el aviso listo para reenviar.</span></a>
-      <a class="puerta" href="#automatizar"><b>Automatizar</b><span>De la notificación de
-        traslado a la tabla, sin tipear. Y la agenda de lo que vence.</span></a>
-    </div>
-  </div>
-
-  <article class="caja" id="consultar">
-    <h2>Consultar · la normativa con el artículo delante</h2>
-    <p>Preguntás con tus palabras y el sistema devuelve <b>el artículo literal del BOE</b>, con el enlace
-       oficial y la fecha de la versión. <b>Cuando no encuentra la fuente, no contesta.</b></p>
-    <p class="etiqueta">Los 182 fragmentos de la Ley 7/2022 están verificados contra el texto oficial.
-       No es un asesor: dice dónde está escrito.</p>
-    <button class="principal" data-pedir="consultar">Pedí una consulta de prueba</button>
-  </article>
-
-  <article class="caja" id="avisar">
-    <h2>Avisar · cuando cambia una norma que te afecta</h2>
-    <p>Vigila el BOE y la normativa consolidada: <b>qué cambió, desde cuándo rige</b>, y el aviso
-       listo para reenviar.</p>
-    <p class="etiqueta">Y vigila lo que casi nadie mira: las fechas de entrada en vigor, que se mueven.
-       Por ejemplo, el RD 106/2008 se publicó un 12 de febrero y entró en vigor el 26 de septiembre.</p>
-    <button class="principal" data-pedir="avisar">Quiero un aviso de prueba</button>
-  </article>
-
-  <article class="caja" id="automatizar">
-    <h2>Automatizar · de la notificación a la tabla</h2>
-    <p>Del documento del traslado a una tabla: <b>empresa, residuo, LER, toneladas, fechas y vencimientos</b>.
-       Sin tipear, sin copiar y pegar.</p>
-    <p class="etiqueta">Es lo que menos se ve y lo que más tiempo devuelve. Veinte minutos de diagnóstico
-       alcanzan para saber cuánto hay.</p>
-    <button class="principal" data-pedir="automatizar">Pedí el diagnóstico de 20 minutos</button>
-  </article>
 </main>
 <footer>
-  Fuente: PRTR-España (MITECO), datos de residuos 2024 y visor geográfico del PRTR. Son datos públicos y
+  <p>Fuente: PRTR-España (MITECO), datos de residuos 2024 y visor geográfico del PRTR. Son datos públicos y
   agregados: el registro cubre los complejos por encima de los umbrales del PRTR, no a todas las empresas.
-  Esta página no guarda tus datos en ningún servidor.
+  <b>Esta página no guarda tus datos en ningún servidor.</b></p>
+  <p class="quien">EcoSinergia · Héctor Medina Rodríguez · <a href="./datos.html">Quién está detrás y contacto</a></p>
 </footer>
 
 <script>
@@ -193,18 +155,18 @@ function responder(r) {
   const av = document.getElementById('aviso');
   av.classList.add('ver');
   if (r === 'si') {
-    av.innerHTML = '<b>Entonces tu dato está bien cargado.</b> Lo que sigue es que te avisemos cuando la ' +
-      'norma que te aplica cambie — y que el número del registro y tu archivo no se separen nunca.';
+    av.innerHTML = '<b>Entonces tu dato está bien cargado.</b> Lo que conviene es que el número del registro ' +
+      'y tu archivo cronológico no se separen nunca: es lo que se revisa en una inspección.';
   } else if (r === 'no') {
-    av.innerHTML = '<b>Entonces hay una diferencia entre el registro y tu archivo.</b> No es raro, y se ' +
-      'resuelve: es lo que revisamos en el diagnóstico de veinte minutos.';
+    av.innerHTML = '<b>Entonces hay una diferencia entre el registro y tu archivo.</b> No es raro, y conviene ' +
+      'saber por qué antes de que la pregunte alguien más.';
   } else {
-    av.innerHTML = '<b>Ese “no lo sé” es el problema.</b> El archivo cronológico (art. 64 de la Ley 7/2022) ' +
-      'tiene que existir y poder cuadrar con lo declarado. En veinte minutos te decimos cuánto hay.';
+    av.innerHTML = '<b>Ese “no lo sé” es lo que hay que resolver.</b> El archivo cronológico (art. 64 de la ' +
+      'Ley 7/2022) tiene que existir y poder cuadrar con lo declarado en el registro.';
   }
   const wa = document.getElementById('wa');
-  const txt = 'PRTR 2024 · ' + sel[0] + ': ' + euros(sel[4]) + ' · ¿coincide con mi archivo? ' + r + '. ' +
-              'Me interesa el diagnóstico. (Vengo del QR ' + ORIGEN + ')';
+  const txt = 'PRTR 2024 · ' + sel[0] + ': ' + euros(sel[4]) + ' · ¿coincide con mi archivo? ' + r +
+              '. (Vengo del QR ' + ORIGEN + ')';
   wa.href = 'https://wa.me/?text=' + encodeURIComponent(txt);
   wa.classList.remove('oculto');
 }
@@ -225,17 +187,6 @@ document.getElementById('b').addEventListener('input', e => {
 });
 
 document.querySelectorAll('[data-r]').forEach(b => b.addEventListener('click', () => responder(b.dataset.r)));
-
-// Cada puerta lleva su propio pedido, con el origen del QR adentro: se captura sin pedir registro.
-const PEDIDOS = {
-  consultar: 'Consultar: quiero una consulta de prueba con una pregunta mía.',
-  avisar:    'Avisar: quiero recibir un aviso de prueba cuando cambie una norma.',
-  automatizar:'Automatizar: quiero el diagnóstico de veinte minutos.'
-};
-document.querySelectorAll('[data-pedir]').forEach(b => b.addEventListener('click', () => {
-  const t = PEDIDOS[b.dataset.pedir] + ' (Vengo del QR ' + ORIGEN + ')';
-  window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank');
-}));
 
 fetch('datos.json').then(r => r.json()).then(d => {
   DATOS = d;
